@@ -16,7 +16,6 @@ public class ShopApplication {
 	}
 	@GetMapping("hello")
 	public static String helloWorld(){
-		System.out.println();
 		return "Hello World!!";
 	}
 
