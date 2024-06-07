@@ -19,7 +19,8 @@ import java.util.List;
 @RestControllerAdvice
 public class CustomExceptionHandler {
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<Response> notFoundExceptionHandler(NotFoundException notFoundException){
+    public ResponseEntity<Response> notFoundExceptionHandler(
+            NotFoundException notFoundException){
         return new ResponseEntity<>(
                 Response.builder()
                         .date(LocalDate.now())
@@ -30,7 +31,8 @@ public class CustomExceptionHandler {
     }
 
     @ExceptionHandler(AlreadyExistsException.class)
-    public ResponseEntity<Response> AlreadyExistsException(AlreadyExistsException alreadyExistsException){
+    public ResponseEntity<Response> AlreadyExistsException(
+            AlreadyExistsException alreadyExistsException){
         return new ResponseEntity<>(
                 Response.builder()
                         .date(LocalDate.now())
@@ -41,7 +43,8 @@ public class CustomExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Response> handleValidationException(MethodArgumentNotValidException ex){
+    public ResponseEntity<Response> handleValidationException(
+            MethodArgumentNotValidException ex){
         List<String> errors = new ArrayList<>();
         ex.getBindingResult().getAllErrors().forEach((error ) -> {
             errors.add(((FieldError) error).getField().concat(" - " + error.getDefaultMessage()));
@@ -58,7 +61,8 @@ public class CustomExceptionHandler {
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<Response> handleConstraintViolationException(MethodArgumentTypeMismatchException ex){
+    public ResponseEntity<Response> handleConstraintViolationException(
+            MethodArgumentTypeMismatchException ex){
         return new ResponseEntity<>(
                 Response.builder()
                         .date(LocalDate.now())
@@ -66,6 +70,19 @@ public class CustomExceptionHandler {
                         .statusCode(HttpStatus.BAD_REQUEST.name())
                         .build(),
                 HttpStatus.BAD_REQUEST
+        );
+    }
+
+    @ExceptionHandler(AuthenticationFailedException.class)
+    public ResponseEntity<Response> handleAuthenticationFailed(
+            AuthenticationFailedException authenticationFailedException){
+        return new ResponseEntity<>(
+                Response.builder()
+                        .date(LocalDate.now())
+                        .message(List.of(authenticationFailedException.getMessage()))
+                        .statusCode((HttpStatus.FORBIDDEN.name()))
+                        .build(),
+                HttpStatus.FORBIDDEN
         );
     }
 }
